@@ -1,9 +1,8 @@
 #include <iostream>
 #include <limits> //Biblioteca para evitar que se ingrese un dato no pedido
 
-// Estas dos funciones hacen parte de la serie 2
+// Est funcion hace parte de la serie 2
 bool esPrimo(int num);
-bool esRepetido(int a[], int n, int tam);
 //----------------
 
 /* 
@@ -26,12 +25,8 @@ int main(){
     int columnas = 10;
 
     /* 
-    Matriz de ejemplo
-    
-    {1, 3, 6, 10, 15, 21, 28, 36, 45, 55},
-    {2, 3, 5, 7, 11, 13, 17, 19, 23, 29},
-    {0, 1, 1, 2, 3, 5, 8, 13, 21, 34}
-    
+        Tener en cuenta que la primera serie es una suma sucesiva empezando desde el 1, la segunda serie
+        es la serie ordenada de numeros primos y la tercera serie es la de fibonacci
     */
 
     int matriz[filas][columnas];
@@ -105,12 +100,7 @@ int serie1(int a[], int tam){
 
     // Lo que retorna es un indice del  array
 
-    int sum = 2;
-
-    // Si el primer elmento es diferente de 1, ese es el error
-    if(a[0] != 1){
-        return 0;
-    }
+    int sum = 1;
 
     // Este for recorre el array y si no cumple con la serie, se encuentra el error 
     for(int i = 1; i < tam; i++){
@@ -125,80 +115,38 @@ int serie1(int a[], int tam){
 
 // Esta funcion verifica si un numero es primo
 bool esPrimo(int num){
-    int cont = 0;
 
     if(num < 0 || num == 0){return false;}
 
     for(int i = 2; i < num; i++){
-        if(num%i == 0){cont++;}
+        if(num%i == 0){return false;}
     }
-    
-    if(cont != 0){return false;}
-    
+
     return true;
 }
 
-// Esta funcion verifica si un numero esta repetido en un array
-bool esRepetido(int a[], int n, int tam){
-    int cont = 0;
+int serie2(int a[], int tam){
     
-    for(int i = 0; i < tam; i++){
-        if(n == a[i]){
-            cont++;
+    int primos[tam];
+    int ind = 0;
+
+    // Lo que retorna es un indice del array
+
+    for (int i = a[0]; i < a[tam - 1]; i++){
+        if(esPrimo(i)){
+            primos[ind] = i;            
         }
     }
 
-    if(cont > 1){
-        return true;
-    }
-
-    return false;
-};
-
-int serie2(int a[], int tam){
-    
-    // Lo que retorna es un indice del array
-
-    for(int i = 0; i<tam - 1; i++){
-        if(esPrimo(a[i])){
-            if(esRepetido(a,a[i], tam)){
-                // Si hay un numero repetido, es el que esta dañando la serie
-                return i;
-            }else if (a[i] > a[i + 1]){
-                //Aqui se corrobora que el numero siguiente tambien sea un numero primo para poder comparar
-                if(esPrimo(a[i+1])){
-                    // Ya que es una serie ordenada, si el numero esta en una posicion incorrecta es el numero que daña la serie
-                    return i;
-                } else {
-                    return i + 1;
-                }
-            }else{
-                continue;
-            }
-        } else {
+    for(int i = 0; i<tam; i++){
+        if (a[i] != primos[i] ){
             return i;
-        };
+        }
     }
-    
-    // Si el ultimo elmento es diferente del decimo numero primo, ese es el error
-    if(a[9] != 29){
-        return 9;
-    }
-
     return -1;
 }
 
 int serie3(int a[], int tam){
-   
-    // Lo que retorna es un indice del array
-   
-    // Los dos primeros numeros en la serie de fibonacci son el 0 y el 1
-    if(a[0] != 0){
-        return 0;
-    } else if(a[1] != 1){
-        return 1;
-    }
-
     // For par ver si el numero a verificar es la suma de los dos numeros anteriores, sino ese es el error
     for(int i = 2; i < tam; i++){
         if(a[i] != a[i-1] + a[i-2]){
